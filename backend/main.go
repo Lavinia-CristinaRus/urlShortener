@@ -2,13 +2,13 @@ package main
 import (
 	"fmt"
 	"log"
-	"github.com/gofiber/fiber/v2"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	fmt.Println("Main")
 
-	app := fiber.New()
+	r := gin.Default()
 
-	log.Fatal(app.Listen(":4000"))
+	log.Fatal(r.Run(":4000"))
 }
