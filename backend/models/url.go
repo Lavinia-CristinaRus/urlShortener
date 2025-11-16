@@ -2,10 +2,10 @@ package models
 import "time"
 
 type Url struct {
-	idurl uint `gorm:"primaryKey"`
-	long_url string
-	short_url string `gorm:"uniqueIndex"`
-	created_at time.Time
-	expires_at *time.Time `gorm:"type:date"`
-	iduser uint
+	Idurl uint `gorm:"primaryKey"`
+	Long_url string
+	Short_url string `gorm:"uniqueIndex"`
+	Created_at time.Time
+	Expires_at *time.Time `gorm:"type:date"`
+	Iduser uint
 }
