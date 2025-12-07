@@ -24,7 +24,6 @@ func generateShortUrl() string {
 func GenerateUrl(c *gin.Context) {
 	var body struct {
 		Url        string `json:"url"`
-		Short_url string `json:"custom_code"`
 	}
 
 	if err := c.BindJSON(&body); err != nil {
@@ -32,9 +31,26 @@ func GenerateUrl(c *gin.Context) {
 		return
 	}
 
-	Short_url := body.Short_url
-	if Short_url == "" {
+	const maxRetries = 2000 {
+
+	}
+
+	for i := 0; i < maxRetries; i++ {
 		Short_url = generateShortUrl()
+
+		var found models.Url
+		err := database.DB.Where("short_url = ?", shortCode).First(&found).Error
+		if err != nil {
+			if err == gorm.ErrRecordNotFound {
+				break;
+			}
+			log.Println("DB error while checking short URL:", err)
+			continue
+		}
+	}
+	if i == 2000 {
+		c.JSON(500, gin.H{"error": "Could not create URL, all 2000 generated options are already in use"})
+		return
 	}
 
 	url := models.Url{
@@ -43,7 +59,7 @@ func GenerateUrl(c *gin.Context) {
 	}
 
 	if err := database.DB.Create(&url).Error; err != nil {
-		c.JSON(500, gin.H{"error": "Could not create URL"})
+		c.JSON(500, gin.H{"error": "Could not create URL, a database error occurred"})
 		return
 	}
 
