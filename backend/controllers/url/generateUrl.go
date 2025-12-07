@@ -35,10 +35,10 @@ func GenerateUrl(c *gin.Context) {
 	}
 
 	const maxRetries = 2000
-	i := 0
+	i := -1
 	Short_url := ""
-	for i := 0; i < maxRetries; i++ {
-		Short_url := generateShortUrl()
+	for i = 0; i < maxRetries; i++ {
+		Short_url = generateShortUrl()
 
 		var found models.Url
 		err := database.DB.Where("short_url = ?", Short_url).First(&found).Error
