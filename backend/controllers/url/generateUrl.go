@@ -23,7 +23,8 @@ func generateShortUrl() string {
 
 func GenerateUrl(c *gin.Context) {
 	var body struct {
-		Url        string `json:"url"`
+		Url        string `json:"Url"`
+		Iduser	   string `json:"Iduser"`
 	}
 
 	if err := c.BindJSON(&body); err != nil {
@@ -54,8 +55,10 @@ func GenerateUrl(c *gin.Context) {
 	}
 
 	url := models.Url{
-		Long_url:   body.Url,
-		Short_url: Short_url,
+		Long_url:    body.Url,
+		Short_url:   Short_url,
+		Created_at:  time.Now(),
+		Iduser:      body.Iduser
 	}
 
 	if err := database.DB.Create(&url).Error; err != nil {
