@@ -14,9 +14,9 @@ func Signup(c *gin.Context) {
 		Password string `json:"Password"`
 	}
 	
-
+    // gin.H{"message" : c}
 	if err := c.BindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -47,12 +47,12 @@ func Signin(c *gin.Context) {
 
     var user models.User
     if err := database.DB.Where("email = ?", input.Email).First(&user).Error; err != nil {
-        c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
+        c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email"})
         return
     }
 
     if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(input.Password)); err != nil {
-        c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
+        c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid password"})
         return
     }
 
