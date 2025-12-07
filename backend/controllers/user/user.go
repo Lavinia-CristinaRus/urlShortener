@@ -14,9 +14,8 @@ func Signup(c *gin.Context) {
 		Password string `json:"Password"`
 	}
 	
-    // gin.H{"message" : c}
 	if err := c.BindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
 		return
 	}
 
