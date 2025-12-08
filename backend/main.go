@@ -16,5 +16,6 @@ func main() {
 	r.POST("/api/signup", user.Signup)
 	r.POST("/api/signin", user.Signin)
 	r.POST("/api/generateUrl", url.GenerateUrl)
+	r.POST("/api/customizeUrl", url.CustomizeUrl)
 	log.Fatal(r.Run(":4000"))
 }
