@@ -9,6 +9,7 @@ import (
 	"url-shortener/database"
 	"url-shortener/models"
 )
+
 func CustomizeUrl(c *gin.Context) {
 	var body struct {
 		Idurl        uint `json:"Idurl"`
@@ -40,4 +41,29 @@ func CustomizeUrl(c *gin.Context) {
 	c.JSON(400, gin.H{"error": "Short url provided is already in use"})
 	log.Println("Url already in use")
 	return
+}
+
+func SetUrlExpirationDate(c *gin.Context) {
+	var body struct {
+		Idurl        uint `json:"Idurl"`
+		Expires_at	 time.Time `json:"Expires_at"`
+	}
+
+	if err := c.BindJSON(&body); err != nil {
+		c.JSON(400, gin.H{"error": "Invalid input"})
+		return
+	}
+	if time.Now().After(body.Expires_at) {
+		c.JSON(400, gin.H{"error": "Invalid expiration date, it can't be a past date"})
+		return
+	}
+
+	if err := database.DB.Model(&models.Url{}).Where("idurl = ?", body.Idurl).Update("Expires_at", body.Expires_at).Error; err != nil {
+		c.JSON(400, gin.H{"error": "Failed to update the url expiration date"})
+		log.Println("Update failed:", err)
+		return
+	}
+	c.JSON(200, gin.H{"message": "Url expiration date is set"})
+	return
+
 }
