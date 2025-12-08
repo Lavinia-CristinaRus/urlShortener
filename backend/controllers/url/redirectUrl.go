@@ -4,11 +4,29 @@ import (
 	"gorm.io/gorm"
 	"log"
 	"time"
+	"net/netip"
+	"net/http"
+	"io"
 
+	"github.com/oschwald/maxminddb-golang/v2"
 	"github.com/gin-gonic/gin"
 	"url-shortener/database"
 	"url-shortener/models"
 )
+
+func getPublicIP() string {
+    resp, err := http.Get("https://api.ipify.org")
+    if err != nil {
+        log.Fatal(err)
+    }
+    defer resp.Body.Close()
+
+    body, err := io.ReadAll(resp.Body)
+    if err != nil {
+        log.Fatal(err)
+    }
+    return string(body)
+}
 
 func RedirectUrl(c *gin.Context) {
     shortCode := c.Param("short")
@@ -29,6 +47,40 @@ func RedirectUrl(c *gin.Context) {
         c.JSON(400, gin.H{"error": "URL has expired"})
         return
     }
+
+	ipAddr := c.ClientIP()
+	if ipAddr == "::1" {
+		ipAddr = getPublicIP()
+	}
+	log.Println("IP: ", ipAddr)
+	db, err := maxminddb.Open("./geoLite/GeoLite2-City.mmdb")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	ip, err := netip.ParseAddr(ipAddr)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var record struct {
+		Country struct {
+			ISOCode string            `maxminddb:"iso_code"`
+			Names   map[string]string `maxminddb:"names"`
+		} `maxminddb:"country"`
+		City struct {
+			Names map[string]string `maxminddb:"names"`
+		} `maxminddb:"city"`
+	}
+
+	err = db.Lookup(ip).Decode(&record)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println("Country: ", record.Country.Names["en"], record.Country.ISOCode)
+	log.Println("City: ", record.City.Names["en"])
 
     c.Redirect(302, url.Long_url)
 }

@@ -13,6 +13,7 @@ func main() {
 	database.Connect()
 
 	r := gin.Default()
+
 	r.POST("/api/signup", user.Signup)
 	r.POST("/api/signin", user.Signin)
 	r.POST("/api/generateUrl", url.GenerateUrl)
