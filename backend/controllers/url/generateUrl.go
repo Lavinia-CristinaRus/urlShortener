@@ -82,7 +82,6 @@ func CustomizeUrl(c *gin.Context) {
 		c.JSON(400, gin.H{"error": "Invalid input"})
 		return
 	}
-	// log.Println("body:", body)
 
 	var found models.Url
 	err := database.DB.Where("short_url = ?", body.Customurl).First(&found).Error
