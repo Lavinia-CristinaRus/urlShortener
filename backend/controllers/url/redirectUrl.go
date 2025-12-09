@@ -53,6 +53,25 @@ func RedirectUrl(c *gin.Context) {
 		ipAddr = getPublicIP()
 	}
 	log.Println("IP: ", ipAddr)
+
+	var count int64
+
+    err = database.DB.Model(&models.Click{}).
+        Where("ip_address = ?", ipAddr).
+        Where("timestamp > ?", time.Now().Add(-time.Minute)).
+        Count(&count).Error
+
+	if (err != nil) && (err != gorm.ErrRecordNotFound) {
+		log.Println(err)
+		c.JSON(500, gin.H{"error": "Could not read entries, a database error occurred"})
+		return
+	}
+
+	if count >= 10 {
+		c.JSON(400, gin.H{"error": "Maximum number of clicks reached in the last minute, please try again later"})
+		return
+	}
+
 	db, err := maxminddb.Open("./geoLite/GeoLite2-City.mmdb")
 	if err != nil {
 		log.Fatal(err)
