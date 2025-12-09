@@ -19,6 +19,7 @@ func main() {
 	r.POST("/api/generateUrl", url.GenerateUrl)
 	r.POST("/api/customizeUrl", url.CustomizeUrl)
 	r.POST("/api/setUrlExpirationDate", url.SetUrlExpirationDate)
+	r.POST("api/generateQrCode", url.GenerateQrCode)
 	r.GET("/:short", url.RedirectUrl)
 	log.Fatal(r.Run(":4000"))
 }
