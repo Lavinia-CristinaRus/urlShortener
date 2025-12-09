@@ -82,5 +82,17 @@ func RedirectUrl(c *gin.Context) {
 	log.Println("Country: ", record.Country.Names["en"], record.Country.ISOCode)
 	log.Println("City: ", record.City.Names["en"])
 
+	click := models.Click{
+		Timestamp:  time.Now(),
+		Ip_address: ipAddr,
+		Country:	record.Country.Names["en"],
+		City:		record.City.Names["en"],
+		Idurl:		url.Idurl,
+	}
+
+	if err := database.DB.Create(&click).Error; err != nil {
+		c.JSON(500, gin.H{"error": "Could not create object, a database error occurred"})
+		return
+	}
     c.Redirect(302, url.Long_url)
 }
