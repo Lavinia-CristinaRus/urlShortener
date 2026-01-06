@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"url-shortener/controllers/user"
 	"url-shortener/controllers/url"
+	"url-shortener/utils"
 	"time"
 )
 
@@ -27,10 +28,17 @@ func main() {
 
 	r.POST("/api/signup", user.Signup)
 	r.POST("/api/signin", user.Signin)
-	r.POST("/api/generateUrl", url.GenerateUrl)
-	r.POST("/api/customizeUrl", url.CustomizeUrl)
-	r.POST("/api/setUrlExpirationDate", url.SetUrlExpirationDate)
-	r.POST("/api/generateQrCode", url.GenerateQrCode)
 	r.GET("/:short", url.RedirectUrl)
+
+	auth := r.Group("/api")
+    auth.Use(utils.AuthMiddleware())
+    {
+        auth.GET("/urls", url.GetMyURLs)
+		auth.POST("/api/generateUrl", url.GenerateUrl)
+		auth.POST("/api/customizeUrl", url.CustomizeUrl)
+		auth.POST("/api/setUrlExpirationDate", url.SetUrlExpirationDate)
+		auth.POST("/api/generateQrCode", url.GenerateQrCode)
+    }
+
 	log.Fatal(r.Run(":4000"))
 }

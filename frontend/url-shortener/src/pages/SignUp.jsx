@@ -17,7 +17,7 @@ export default function SignUp() {
         password,
       });
 
-      setMessage(response.message || "New account created");
+      setMessage(response.data.message || "New account created");
     } catch (err) {
       if (err.response) {
         setError(err.response.data.error || "New account could not be created");

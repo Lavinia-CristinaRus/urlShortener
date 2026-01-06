@@ -16,8 +16,11 @@ export default function SignIn() {
         email,
         password,
       });
+      localStorage.setItem("token", response.data.token);
+      console.log(response);
+      console.log(response.data.token)
 
-      setMessage(response.message || "Login successful");
+      setMessage(response.data.message || "Login done");
     } catch (err) {
       if (err.response) {
         setError(err.response.data.error || "Login failed");

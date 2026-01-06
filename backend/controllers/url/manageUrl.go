@@ -67,3 +67,7 @@ func SetUrlExpirationDate(c *gin.Context) {
 	return
 
 }
+
+func GetMyURLs(c *gin.Context) {
+	
+}

@@ -7,6 +7,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"url-shortener/models"
     "strings"
+    "url-shortener/utils"
 )
 
 func Signup(c *gin.Context) {
@@ -62,5 +63,14 @@ func Signin(c *gin.Context) {
         return
     }
 
-    c.JSON(http.StatusOK, gin.H{"message": "Login successful"})
+    token, err := utils.GenerateToken(user.Email)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Token generation failed"})
+        return
+    }
+
+    c.JSON(http.StatusOK, gin.H{
+        "token": token,
+        "message": "Login successful"
+    })
 }
