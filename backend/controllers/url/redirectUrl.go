@@ -43,10 +43,10 @@ func RedirectUrl(c *gin.Context) {
         return
     }
 
-    if time.Now().After(url.Expires_at) {
-        c.JSON(400, gin.H{"error": "URL has expired"})
+	if url.Expires_at != nil && time.Now().After(*url.Expires_at) {
+		c.JSON(400, gin.H{"error": "URL has expired"})
         return
-    }
+	}
 
 	ipAddr := c.ClientIP()
 	if ipAddr == "::1" {

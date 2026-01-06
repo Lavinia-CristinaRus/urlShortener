@@ -1,11 +1,13 @@
 import { useState } from "react";
 import api from "../utils/api";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
+  const navigate = useNavigate();
 
   const submit = async () => {
     setError(null);
@@ -16,8 +18,10 @@ export default function SignUp() {
         email,
         password,
       });
+      localStorage.setItem("token", response.data.token);
 
       setMessage(response.data.message || "New account created");
+      navigate("/urls");
     } catch (err) {
       if (err.response) {
         setError(err.response.data.error || "New account could not be created");

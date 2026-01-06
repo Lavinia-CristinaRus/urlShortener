@@ -1,11 +1,13 @@
 import { useState } from "react";
 import api from "../utils/api";
+import { useNavigate } from "react-router-dom";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
+  const navigate = useNavigate();
 
   const submit = async () => {
     setError(null);
@@ -17,10 +19,9 @@ export default function SignIn() {
         password,
       });
       localStorage.setItem("token", response.data.token);
-      console.log(response);
-      console.log(response.data.token)
 
       setMessage(response.data.message || "Login done");
+      navigate("/urls");
     } catch (err) {
       if (err.response) {
         setError(err.response.data.error || "Login failed");

@@ -4,10 +4,12 @@ import (
 	"time"
 	"gorm.io/gorm"
 	"log"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"url-shortener/database"
 	"url-shortener/models"
+	"url-shortener/controllers/user"
 )
 
 func CustomizeUrl(c *gin.Context) {
@@ -69,5 +71,22 @@ func SetUrlExpirationDate(c *gin.Context) {
 }
 
 func GetMyURLs(c *gin.Context) {
-	
+	email := c.MustGet("email").(string)
+	iduser := user.GetUserIdByEmail(email)
+	if iduser == -1 {
+		c.JSON(400, gin.H{"error": "Invalid token"})
+		return
+	}
+	var urls []models.Url
+	if err := database.DB.Where("iduser = ?", iduser).Find(&urls).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+            c.JSON(200, gin.H{"message": "You don't have any urls at the moment"})
+            return
+        }
+		c.JSON(400, gin.H{"error": "Failed to get the urls"})
+		log.Println("Get urls failed:", err)
+		return
+	}
+
+	c.JSON(http.StatusOK, urls)
 }

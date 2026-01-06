@@ -6,6 +6,6 @@ type Url struct {
 	Long_url string
 	Short_url string `gorm:"uniqueIndex"`
 	Created_at time.Time
-	Expires_at time.Time `gorm:"type:date"`
+	Expires_at *time.Time `gorm:"type:date"`
 	Iduser uint
 }

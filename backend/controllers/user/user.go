@@ -71,6 +71,14 @@ func Signin(c *gin.Context) {
 
     c.JSON(http.StatusOK, gin.H{
         "token": token,
-        "message": "Login successful"
+        "message": "Login successful",
     })
+}
+
+func GetUserIdByEmail(email string) int {
+    var user models.User
+    if err := database.DB.Where("email = ?", email).First(&user).Error; err != nil {
+        return -1
+    }
+    return int(user.Iduser)
 }

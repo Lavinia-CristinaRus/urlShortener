@@ -7,7 +7,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-var jwtKeyMid = []byte("poiuytrewq")
+// var jwtKeyMid = []byte("poiuytrewq")
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -21,7 +21,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
 
 		token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
-			return jwtKeyMid, nil
+			return jwtKey, nil
 		})
 
 		if err != nil || !token.Valid {

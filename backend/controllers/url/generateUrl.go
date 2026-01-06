@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"url-shortener/database"
 	"url-shortener/models"
+	"url-shortener/controllers/user"
 )
 
 func generateShortUrl() string {
@@ -25,8 +26,13 @@ func generateShortUrl() string {
 
 func GenerateUrl(c *gin.Context) {
 	var body struct {
-		Url        string `json:"Url"`
-		Iduser	   uint `json:"Iduser"`
+		Url        string `json:"url"`
+	}
+	email := c.MustGet("email").(string)
+	iduser := user.GetUserIdByEmail(email)
+	if iduser == -1 {
+		c.JSON(400, gin.H{"error": "Invalid token"})
+		return
 	}
 
 	if err := c.BindJSON(&body); err != nil {
@@ -60,7 +66,7 @@ func GenerateUrl(c *gin.Context) {
 		Long_url:    body.Url,
 		Short_url:   Short_url,
 		Created_at:  time.Now(),
-		Iduser:      body.Iduser,
+		Iduser:      uint(iduser),
 	}
 
 	if err := database.DB.Create(&url).Error; err != nil {
