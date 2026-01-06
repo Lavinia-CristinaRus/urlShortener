@@ -10,8 +10,8 @@ import (
 
 func Signup(c *gin.Context) {
 	var input struct {
-		Email string `json:"Email"`
-		Password string `json:"Password"`
+		Email string `json:"email"`
+		Password string `json:"password"`
 	}
 	
 	if err := c.BindJSON(&input); err != nil {
@@ -35,8 +35,8 @@ func Signup(c *gin.Context) {
 
 func Signin(c *gin.Context) {
     var input struct {
-        Email string `json:"Email"`
-        Password string `json:"Password"`
+        Email string `json:"email"`
+        Password string `json:"password"`
     }
 
     if err := c.BindJSON(&input); err != nil {
