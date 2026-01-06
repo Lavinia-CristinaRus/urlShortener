@@ -34,10 +34,10 @@ func main() {
     auth.Use(utils.AuthMiddleware())
     {
         auth.GET("/urls", url.GetMyURLs)
-		auth.POST("/api/generateUrl", url.GenerateUrl)
-		auth.POST("/api/customizeUrl", url.CustomizeUrl)
-		auth.POST("/api/setUrlExpirationDate", url.SetUrlExpirationDate)
-		auth.POST("/api/generateQrCode", url.GenerateQrCode)
+		auth.POST("/generateUrl", url.GenerateUrl)
+		auth.POST("/customizeUrl", url.CustomizeUrl)
+		auth.POST("/setUrlExpirationDate", url.SetUrlExpirationDate)
+		auth.POST("/generateQrCode", url.GenerateQrCode)
     }
 
 	log.Fatal(r.Run(":4000"))
