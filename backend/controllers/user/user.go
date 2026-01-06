@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"golang.org/x/crypto/bcrypt"
 	"url-shortener/models"
+    "strings"
 )
 
 func Signup(c *gin.Context) {
@@ -26,6 +27,12 @@ func Signup(c *gin.Context) {
     }
 
 	if err := database.DB.Create(&user).Error; err != nil {
+        if strings.Contains(err.Error(), "Duplicate entry") {
+			c.JSON(http.StatusConflict, gin.H{
+				"error": "An account with this email already exists. Try signing in instead.",
+			})
+			return
+		}
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not create user"})
         return
     }
