@@ -114,6 +114,13 @@ export default function MyUrls() {
             >
               Analytics
             </button>
+            <button
+              style={styles.edit}
+              onClick={() => navigate(`/generateQrCode/${url.Short_url}`)}
+            >
+              Generate QR
+            </button>
+            {/* /generateQrCode/:shortUrl */}
           </div>
         ))}
       </div>
@@ -165,10 +172,10 @@ const styles = {
   },
   row: {
     display: "grid",
-    gridTemplateColumns: "0.5fr 0.22fr 0.22fr auto auto",
-    gap: "85px",
+    gridTemplateColumns: "0.6fr 0.22fr 0.22fr auto auto auto",
+    gap: "10px",
     alignItems: "center",
-    padding: "10px 14px",
+    padding: "8px 30px",
     background: "#f9fafb",
     borderRadius: "8px",
     justifyContent: 'center',

@@ -37,7 +37,7 @@ func main() {
 		auth.POST("/generateUrl", url.GenerateUrl)
 		auth.POST("/customizeUrl", url.CustomizeUrl)
 		auth.POST("/setUrlExpirationDate", url.SetUrlExpirationDate)
-		auth.POST("/generateQrCode", url.GenerateQrCode)
+		auth.GET("/generateQrCode/:shortUrl", url.GenerateQrCode)
 		auth.GET("/urls/:id", url.GetUrlByID)
     }
 

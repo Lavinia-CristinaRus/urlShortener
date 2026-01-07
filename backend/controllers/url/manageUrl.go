@@ -24,7 +24,7 @@ func CustomizeUrl(c *gin.Context) {
 	}
 
 	var found models.Url
-	err = database.DB.Where("short_url = ?", body.Customurl).First(&found).Error
+	err := database.DB.Where("short_url = ?", body.Customurl).First(&found).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			if err := database.DB.Model(&models.Url{}).Where("idurl = ?", body.Idurl).Update("short_url", body.Customurl).Error; err != nil {
