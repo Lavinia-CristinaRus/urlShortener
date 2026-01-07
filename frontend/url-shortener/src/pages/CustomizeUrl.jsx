@@ -15,7 +15,9 @@ export default function CustomizeUrl() {
     api.get(`/api/urls/${id}`)
       .then(res => {
         setShortUrl(res.data.Short_url);
-        setExpiresAt(res.data.Expires_at.split("T")[0] || "");
+        if(res.data.Expires_at){
+            setExpiresAt(res.data.Expires_at.split("T")[0]);
+        }
         localStorage.setItem("lastSavedUrl", res.data.Short_url);
         localStorage.setItem("lastSavedDate", res.data.Expires_at);
       })
