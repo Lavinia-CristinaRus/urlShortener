@@ -1,7 +1,8 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import SignIn from "../pages/SignIn";
 import SignUp from "../pages/SignUp";
 import UrlList from "../pages/UrlList";
+import CustomizeUrl from "../pages/CustomizeUrl";
 
 function PrivateRoute({ children }) {
   const token = localStorage.getItem("token");
@@ -20,6 +21,7 @@ export default function AppRouter() {
         <Route path="/signin" element={<SignIn />}/>
         <Route path="/signup" element={<SignUp />}/>
         <Route path="/urls" element={<PrivateRoute><UrlList /></PrivateRoute>}/>
+        <Route path="/customizeurl/:id" element={<PrivateRoute><CustomizeUrl /></PrivateRoute>}/>
       </Routes>
     </BrowserRouter>
   );

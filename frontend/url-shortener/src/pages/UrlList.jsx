@@ -104,7 +104,7 @@ export default function MyUrls() {
 
             <button
               style={styles.edit}
-              onClick={() => navigate(`/edit/${url.id}`)}
+              onClick={() => navigate(`/customizeurl/${url.Idurl}`)}
             >
               Customize
             </button>

@@ -14,8 +14,8 @@ import (
 
 func CustomizeUrl(c *gin.Context) {
 	var body struct {
-		Idurl        uint `json:"Idurl"`
-		Customurl	 string `json:"Customurl"`
+		Idurl        uint `json:"idurl"`
+		Customurl	 string `json:"customurl"`
 	}
 
 	if err := c.BindJSON(&body); err != nil {
@@ -24,7 +24,7 @@ func CustomizeUrl(c *gin.Context) {
 	}
 
 	var found models.Url
-	err := database.DB.Where("short_url = ?", body.Customurl).First(&found).Error
+	err = database.DB.Where("short_url = ?", body.Customurl).First(&found).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			if err := database.DB.Model(&models.Url{}).Where("idurl = ?", body.Idurl).Update("short_url", body.Customurl).Error; err != nil {
@@ -47,8 +47,8 @@ func CustomizeUrl(c *gin.Context) {
 
 func SetUrlExpirationDate(c *gin.Context) {
 	var body struct {
-		Idurl        uint `json:"Idurl"`
-		Expires_at	 time.Time `json:"Expires_at"`
+		Idurl        uint `json:"idurl"`
+		Expires_at	 time.Time `json:"expires_at"`
 	}
 
 	if err := c.BindJSON(&body); err != nil {
@@ -89,4 +89,26 @@ func GetMyURLs(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, urls)
+}
+
+func GetUrlByID(c *gin.Context) {
+	id := c.Param("id")
+	email := c.MustGet("email").(string)
+	iduser := user.GetUserIdByEmail(email)
+	if iduser == -1 {
+		c.JSON(400, gin.H{"error": "Invalid token"})
+		return
+	}
+
+	var url models.Url
+	err := database.DB.
+		Where("idurl = ? AND iduser = ?", id, iduser).
+		First(&url).Error
+
+	if err != nil {
+		c.JSON(404, gin.H{"error": "URL not found"})
+		return
+	}
+
+	c.JSON(200, url)
 }
