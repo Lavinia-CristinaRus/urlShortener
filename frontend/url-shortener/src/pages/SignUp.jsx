@@ -33,12 +33,26 @@ export default function SignUp() {
 
   return (
     <>
-      <h2>Sign Up</h2>
-      <input placeholder="Email" onChange={e => setEmail(e.target.value)} />
-      <input type="password" placeholder="Password" onChange={e => setPassword(e.target.value)} />
-      <button onClick={submit}>Sign Up</button>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {message && <p style={{ color: "green" }}>{message}</p>}
+      <div  style={styles.container}>
+        <h2>Sign Up</h2>
+        <input placeholder="Email" onChange={e => setEmail(e.target.value)} />
+        <input type="password" placeholder="Password" onChange={e => setPassword(e.target.value)} />
+        <button style={{ marginTop: "20px" }} onClick={submit}>Sign Up</button>
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        {message && <p style={{ color: "green" }}>{message}</p>}
+      </div>
     </>
   );
+}
+
+const styles = {
+  container: {
+    width:"20%",
+    height:"90%",
+    marginLeft:"40%",
+    marginTop:"5%",
+    display: "flex",
+    flexDirection: "column",
+    gap: "20px",
+  },
 }

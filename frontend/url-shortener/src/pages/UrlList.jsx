@@ -57,6 +57,12 @@ export default function MyUrls() {
             >
               Customize
             </button>
+            <button
+              style={styles.edit}
+              onClick={() => navigate(`/analytics/${url.id}`)}
+            >
+              Analytics
+            </button>
           </div>
         ))}
       </div>
@@ -101,7 +107,7 @@ const styles = {
   },
   row: {
     display: "grid",
-    gridTemplateColumns: "0.5fr auto auto auto",
+    gridTemplateColumns: "0.5fr 0.22fr 0.22fr auto auto",
     gap: "85px",
     alignItems: "center",
     padding: "10px 14px",
