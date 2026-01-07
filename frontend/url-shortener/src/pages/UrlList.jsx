@@ -36,9 +36,17 @@ export default function MyUrls() {
     }
   };
 
+  const signOut = () => {
+    localStorage.removeItem("token");
+    navigate("/signin");
+  }
+
   return (
     <div style={styles.container}>
       <div style={styles.header}>
+        <div onClick={signOut} style={styles.signOut}>
+          <p>sign out</p>
+        </div>
         <h2 style={styles.h2}>My Short Links</h2>
         <button
           style={styles.createButton}
@@ -124,12 +132,10 @@ const styles = {
     marginRight: "40px",
   },
   header: {
-    width: "90%",
+    width: "100%",
     display: "flex",
     alignItems: "center",
     marginBottom: "20px",
-    marginLeft: "45%",
-    marginRight: "40px",
   },
   generateUrl: {
     width: "90%",
@@ -141,8 +147,8 @@ const styles = {
     gap: "50px",
   },
   h2: {
-    width: "20%",
-    marginRight: "400px",
+    width: "30%",
+    marginRight: "215px",
   },
   createButton: {
     padding: "8px 14px",
@@ -151,7 +157,6 @@ const styles = {
     backgroundColor: "#4f46e5",
     color: "#fff",
     cursor: "pointer",
-    justifyContent: 'right',
   },
   list: {
     display: "flex",
@@ -198,6 +203,14 @@ const styles = {
     backgroundColor: "#942727ff",
     color: "#fff",
     cursor: "pointer",
-    justifyContent: 'right',
+    justifyContent:"right",
   },
+  signOut: {
+    fontWeight: "bold",
+    color: "#2563eb",
+    paddingLeft:"20px",
+    paddingRight:"32%",
+    width:"200px",
+    alignItems:"center"
+  }
 };
