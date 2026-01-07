@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"url-shortener/controllers/user"
 	"url-shortener/controllers/url"
+	"url-shortener/controllers/click"
 	"url-shortener/utils"
 	"time"
 )
@@ -39,6 +40,7 @@ func main() {
 		auth.POST("/setUrlExpirationDate", url.SetUrlExpirationDate)
 		auth.GET("/generateQrCode/:shortUrl", url.GenerateQrCode)
 		auth.GET("/urls/:id", url.GetUrlByID)
+		auth.GET("/urls/analytics/:id", click.GetStatisticsByUrlId)
     }
 
 	log.Fatal(r.Run(":4000"))

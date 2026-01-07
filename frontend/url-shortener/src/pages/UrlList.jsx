@@ -110,7 +110,7 @@ export default function MyUrls() {
             </button>
             <button
               style={styles.edit}
-              onClick={() => navigate(`/analytics/${url.id}`)}
+              onClick={() => navigate(`/analytics/${url.Idurl}`)}
             >
               Analytics
             </button>
