@@ -5,12 +5,36 @@ import { useNavigate } from "react-router-dom";
 export default function MyUrls() {
   const [urls, setUrls] = useState([]);
   const navigate = useNavigate();
+  const [isVisible, setVisible] = useState(false);
+  const [url, setUrl] = useState("");
+  const [error, setError] = useState(null);
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
     api.get("/api/urls")
       .then(res => setUrls(res.data))
       .catch(err => console.error(err));
-  }, []);
+  }, [isVisible]);
+
+  const submit = async () => {
+    setError(null);
+    setMessage(null);
+
+    try {
+      const response = await api.post("/api/generateUrl", {
+        url
+      });
+
+      setMessage(response.data.message || "Generation done");
+      setVisible(false)
+    } catch (err) {
+      if (err.response) {
+        setError(err.response.data.error || "Generation failed");
+      } else {
+        setError("Cannot connect to server");
+      }
+    }
+  };
 
   return (
     <div style={styles.container}>
@@ -18,7 +42,7 @@ export default function MyUrls() {
         <h2 style={styles.h2}>My Short Links</h2>
         <button
           style={styles.createButton}
-          onClick={() => navigate("/generateUrl")}
+          onClick={() => setVisible(true)}
         >
           + Create new short link
         </button>
@@ -27,6 +51,25 @@ export default function MyUrls() {
       {urls.length === 0 && (
         <p style={styles.empty}>You don’t have any short links yet.</p>
       )}
+
+      {isVisible && (<div style={styles.generateUrl}>
+        <input style={{width:"20%", marginRight:"150px", marginLeft:"120px", height:"25px"}} placeholder="Url" onChange={e => setUrl(e.target.value)} />
+        <button
+          style={styles.createButton}
+          onClick={submit}
+        >
+          Generate short link
+        </button>
+        <button
+          style={styles.cancelButton}
+          onClick={() => setVisible(false)}
+        >
+          Cancel
+        </button>
+      </div>)}
+
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      {message && <p style={{ color: "green" }}>{message}</p>}
 
       <div style={styles.list}>
         {urls.map(url => (
@@ -88,6 +131,15 @@ const styles = {
     marginLeft: "45%",
     marginRight: "40px",
   },
+  generateUrl: {
+    width: "90%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: "50px",
+    marginTop: "50px",
+    gap: "50px",
+  },
   h2: {
     width: "20%",
     marginRight: "400px",
@@ -138,5 +190,14 @@ const styles = {
   },
   empty: {
     color: "#6b7280",
+  },
+  cancelButton: {
+    padding: "8px 14px",
+    borderRadius: "6px",
+    border: "none",
+    backgroundColor: "#942727ff",
+    color: "#fff",
+    cursor: "pointer",
+    justifyContent: 'right',
   },
 };
