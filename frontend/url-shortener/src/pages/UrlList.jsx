@@ -85,11 +85,12 @@ const styles = {
     display: "flex",
     alignItems: "center",
     marginBottom: "20px",
-    marginLeft: "40px",
+    marginLeft: "45%",
     marginRight: "40px",
   },
   h2: {
-    marginRight: "100px",
+    width: "20%",
+    marginRight: "400px",
   },
   createButton: {
     padding: "8px 14px",
