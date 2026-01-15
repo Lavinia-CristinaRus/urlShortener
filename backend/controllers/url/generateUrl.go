@@ -12,11 +12,16 @@ import (
 	"url-shortener/controllers/user"
 )
 
+func randRange(min, max int) int {
+    return rand.Intn(max-min) + min
+}
+
 func generateShortUrl() string {
 	const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 	rand.Seed(time.Now().UnixNano())
+	length := randRange(6, 8)
 
-	code := make([]byte, 7)
+	code := make([]byte, length)
 	for i := range code {
 		code[i] = letters[rand.Intn(len(letters))]
 	}
