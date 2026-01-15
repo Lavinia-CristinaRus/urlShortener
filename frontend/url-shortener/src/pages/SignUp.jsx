@@ -31,6 +31,10 @@ export default function SignUp() {
     }
   };
 
+  const signIn = () => {
+    navigate("/signin");
+  }
+
   return (
     <>
       <div  style={styles.container}>
@@ -40,6 +44,9 @@ export default function SignUp() {
         <button style={{ marginTop: "20px" }} onClick={submit}>Sign Up</button>
         {error && <p style={{ color: "red" }}>{error}</p>}
         {message && <p style={{ color: "green" }}>{message}</p>}
+        <div onClick={signIn} style={styles.signIn}>
+          <p> or sign in</p>
+        </div>
       </div>
     </>
   );
@@ -55,4 +62,12 @@ const styles = {
     flexDirection: "column",
     gap: "20px",
   },
+  signIn: {
+    fontWeight: "bold",
+    color: "#2563eb",
+    width:"100%",
+    alignItems:"center",
+    justifyItems:"center",
+    display: "grid"
+  }
 }
