@@ -20,6 +20,7 @@ export default function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<Navigate to="/signin" />} />
         <Route path="/signin" element={<SignIn />}/>
         <Route path="/signup" element={<SignUp />}/>
         <Route path="/urls" element={<PrivateRoute><UrlList /></PrivateRoute>}/>
